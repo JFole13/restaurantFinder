@@ -1,5 +1,123 @@
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
+
+@font-face{
+    font-family: "visby-round";
+    src: url("visby-round/OTF/VisbyRoundCF-Regular.otf");
+}
+
+#main-container{
+    width:100vw;
+    height:100vh;
+    background:#000;
+    display:grid;
+    grid-template-columns:1fr 1.75fr;
+}
+
+#left-container{
+    background-image:url("images/city.jpg");
+    background-size:cover;
+    background-repeat:no-repeat;
+    /* Maybe add blur to background 
+    filter: blur(1px);
+    -webkit-filter: blur(1px); */
+    width:100%;
+    height:100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+
+}
+
+input { 
+    border-style: none; 
+    background: transparent; 
+    outline: none; 
+}
+
+::placeholder{
+    font-size: 1.4rem;
+    font-family: "visby-round"
+}
+
+#input-container{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 22%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 2px;
+  padding-left: 1rem;
+  background: rgba(57, 63, 84, 0.8);
+}
+
+#input-container::after{
+    content: "";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 999;
+    height: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-position: 0% 0%;
+    background: linear-gradient(to right, #FF4753, #FF0808, #F87B7B, #fff, #FF0808, #FF4753);
+    background-size: 500% auto;
+    animation: gradient 3s linear infinite;
+}
+
+/* make animation smoother for input */
+
+#input-container input{
+    flex-grow: 1;
+    color: #ACA8A8;
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+    vertical-align: middle;
+    font-family: "visby-round"
+}
+
+/* .webflow-style-input button {
+    padding-right: 1rem;
+    color: #7881A1;
+    font-size: 2.4rem;
+    line-height: 2.4rem;
+    vertical-align: middle;
+    transition: color .25s;
+} */
+
+#input-container button{
+    background: none;
+    border: none; 
+    outline: none; 
+    padding-right: 1rem;
+}
+
+
+/* button {  
+    background: none;
+    border: none; 
+    outline: none; 
+} */
+
+button:hover {
+    color: #ACA8A8;
+    cursor: pointer;
+}
+
+#right-container{
+    background:#FF4753;
+    width:100%;
+    height:100%;
+}
+
+@keyframes gradient { 
+    0%{background-position:0 0}
+    100%{background-position:100% 0}
+  }
