@@ -12,7 +12,6 @@
 #main-container{
     width:100vw;
     height:100vh;
-    background:#000;
     display:grid;
     grid-template-columns:1fr 1.75fr;
 }
@@ -67,7 +66,7 @@ input {
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     background-position: 0% 0%;
-    background: linear-gradient(to right, #FF4753, #FF0808, #F87B7B, #fff, #FF0808, #FF4753);
+    background: linear-gradient(to right, #FF0808, #FF4753, #fff, #FF4753, #FF0808, #F87B7B);
     background-size: 500% auto;
     animation: gradient 3s linear infinite;
 }
@@ -115,9 +114,93 @@ button:hover {
     background:#FF4753;
     width:100%;
     height:100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
 }
 
 @keyframes gradient { 
     0%{background-position:0 0}
     100%{background-position:100% 0}
   }
+
+#header-container{
+    width:100%;
+    height:100%;
+}
+
+#heading{
+    font-family: "visby-round";
+    text-align: center;
+    font-size: 4rem;
+    padding: 5rem 0 0 0;
+}
+
+#step1-container{
+    width:100%;
+    height:100%;
+    display:grid;
+    grid-template-rows: 1fr 1.5fr;
+}
+
+#step1-text-container{
+    width:100%;
+    height:100%;
+}
+
+.stepsText{
+    font-family: "visby-round";
+    font-size: 1.7rem;
+    padding: 1.5rem 4rem;
+    margin: 0;
+}
+
+.stepsText em{
+    font-size: 1rem;
+}
+
+#exampleSelection{
+    width:100%;
+    height:100%;
+}
+
+#exampleSelection img{
+    width:400px;
+    height:100px;
+    padding-left:4rem;
+}
+
+#step2-container{
+    width:100%;
+    height:100%;
+    display: grid;
+    grid-template-rows: .5fr 1fr;
+    justify-items: center;
+    align-items: end;
+}
+
+#step2-text-container{
+    width: 100%;
+    height:100%;
+}
+
+#example-cards-container{
+    width:100%;
+    height:100%;
+}
+
+#box1{
+    width:200px;
+    height:100px;
+    padding-left:4rem;
+}
+
+.white{
+    color:white;
+}
+
+/* going to use images of cards for the examples in step 2 container */
+
+
+
+
+
