@@ -111,7 +111,7 @@ button:hover {
 }
 
 #right-container{
-    background:#FF4753;
+    background: url("images/grey_wash_wall.png");
     width:100%;
     height:100%;
     display: grid;
@@ -194,11 +194,15 @@ button:hover {
     padding-left:4rem;
 }
 
-.white{
-    color:white;
+.red{
+    color:#FF0808;
+    padding:0;
+    margin:0;
 }
 
 /* going to use images of cards for the examples in step 2 container */
+/* add new branch and style the right container better. put border bottom for 
+heading container and a lighter red background for the steps container */
 
 
 
