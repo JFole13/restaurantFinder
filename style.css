@@ -116,6 +116,7 @@ button:hover {
     height:100%;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
+    z-index: 0;
 }
 
 @keyframes gradient { 
@@ -199,6 +200,69 @@ button:hover {
     padding:0;
     margin:0;
 }
+
+.card-container{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    width:90%;
+    height:85%;
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    box-shadow:
+    0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.1),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.16),
+    0 29px 33.4px rgba(0, 0, 0, 0.23),
+    0 45px 80px rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 15px 15px;
+}
+
+.card-picture{
+    width:100%;
+    height:100%;
+    background:url('images/example.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 15px 15px 0 0;
+}
+
+.card-caption-container{
+    width:100%;
+    height:100%;
+    background: #fff;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items:center;
+    border-radius: 0 0 15px 15px;
+    border-top: thin solid #f2f2f2;
+}
+
+.card-caption-text-container{
+    width:100%;
+    height:50%;
+}
+
+.card-caption-price-container{
+    width:100%;
+    height:50%;
+}
+
+.card-caption{
+    font-family: "visby-round";
+    padding-left: 1rem;
+    font-size: 1.3rem;
+    font-weight:bold;
+}
+
+
+
 
 /* going to use images of cards for the examples in step 2 container */
 /* add new branch and style the right container better. put border bottom for 
