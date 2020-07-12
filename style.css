@@ -20,16 +20,48 @@
     background-image:url("images/city.jpg");
     background-size:cover;
     background-repeat:no-repeat;
-    /* Maybe add blur to background 
-    filter: blur(1px);
-    -webkit-filter: blur(1px); */
     width:100%;
     height:100%;
     display: grid;
     grid-template-rows: 1fr 1fr;
     align-items: center;
-
 }
+
+#suggestion-container{
+    display: flex;
+    height: 100%;
+    width:100%;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+#suggestions{
+    width: 25%;
+    font-family: "visby-round";
+    background: rgba(57, 63, 84, 0.8);
+    color: #ACA8A8;
+    display: none;
+    max-height: 30%;
+    overflow: scroll;
+    position: fixed;
+    overflow-x: hidden;
+}
+
+#suggestions p{
+    font-size: 1.5rem;
+}
+
+ul li{
+    padding: .5rem 0;
+    font-size: 2rem;
+    list-style-type: none;
+}
+
+ul li:hover{
+    color: #FF9595;
+    cursor: pointer;
+}
+
 
 input { 
     border-style: none; 
@@ -41,6 +73,14 @@ input {
     font-size: 1.4rem;
     font-family: "visby-round"
 }
+
+::-webkit-scrollbar{
+    width:3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #fff;
+  }
 
 #input-container{
   position: relative;
@@ -82,15 +122,6 @@ input {
     font-family: "visby-round"
 }
 
-/* .webflow-style-input button {
-    padding-right: 1rem;
-    color: #7881A1;
-    font-size: 2.4rem;
-    line-height: 2.4rem;
-    vertical-align: middle;
-    transition: color .25s;
-} */
-
 #input-container button{
     background: none;
     border: none; 
@@ -98,12 +129,6 @@ input {
     padding-right: 1rem;
 }
 
-
-/* button {  
-    background: none;
-    border: none; 
-    outline: none; 
-} */
 
 button:hover {
     color: #ACA8A8;
@@ -117,6 +142,18 @@ button:hover {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     z-index: 0;
+}
+
+#box1{
+    background: red;
+    width:100%;
+    height:100%;
+}
+
+#box2{
+    background: blue;
+    width:100%;
+    height:100%;
 }
 
 @keyframes gradient { 
@@ -157,6 +194,7 @@ button:hover {
 
 .stepsText em{
     font-size: 1rem;
+    padding: 0 1rem;
 }
 
 #exampleSelection{
@@ -164,9 +202,15 @@ button:hover {
     height:100%;
 }
 
-#exampleSelection img{
+#exampleSelection img {
     width:400px;
     height:100px;
+    padding-left:4rem;
+}
+
+#example-cards-container img{
+    width:400px;
+    height:150px;
     padding-left:4rem;
 }
 
@@ -187,12 +231,6 @@ button:hover {
 #example-cards-container{
     width:100%;
     height:100%;
-}
-
-#box1{
-    width:200px;
-    height:100px;
-    padding-left:4rem;
 }
 
 .red{

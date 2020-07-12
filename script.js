@@ -9,10 +9,59 @@
 
 //querySelector must have period
 
-//clean these functions up
-// we got an infinite loop rn
+//if more than like 6 cities pop up change the font size in the suggestion box
 
-document.getElementById('button').addEventListener('click', generateCards)
+//add event listener to each list item in loop
+
+document.getElementById('button').addEventListener('click', fetchCity)
+
+function fetchCity(){
+    let cityParam = '?q=' + document.getElementById('city-selector').value
+
+    let request = new Request('https://developers.zomato.com/api/v2.1/cities' + cityParam, {
+        headers: new Headers({
+            'user-key': '56a17a2f4bcd0c8fc2eab2b69d0f4f01'
+        })
+    })
+
+
+    fetch(request, {
+        method: 'get'
+    }).then(function(response) {
+        return response.json()
+    }).then(function(j) {
+        displaySuggestions(j)
+    }).catch(function(err) {
+        console.log('error')
+    })
+
+    
+}
+
+function displaySuggestions(data){
+    // erase the last search suggestions
+    let suggestionsDOM = document.getElementById('suggestionsList')
+    while(suggestionsDOM.firstChild){
+        suggestionsDOM.removeChild(suggestionsDOM.firstChild);
+    }
+    
+    document.getElementById('suggestions').style.display = 'inline-block'
+
+    if(data.location_suggestions.length > 0){
+        for(let i = 0; i < data.location_suggestions.length; i++){
+            let listItem = document.createElement('li')
+            listItem.innerHTML = data.location_suggestions[i].name
+            document.getElementById('suggestionsList').appendChild(listItem)
+
+            listItem.addEventListener('click', generateCards)
+        }
+    }else{
+        let listItem = document.createElement('p')
+        listItem.style.padding = '1rem 0'
+        listItem.innerHTML = 'No results found'
+        document.getElementById('suggestionsList').appendChild(listItem)
+    }
+}
 
 function generateCards(){
     createContainerForFirstRow()
