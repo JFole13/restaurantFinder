@@ -11,9 +11,9 @@
 
 //if more than like 6 cities pop up change the font size in the suggestion box
 
-//add event listener to each list item in loop
+// fix the suggestion box, dont like the fixed position. Also need to add more restaurants to the right side
 
-document.getElementById('button').addEventListener('click', fetchCity)
+document.getElementById('button').addEventListener('click', generateCards)
 
 function fetchCity(){
     let cityParam = '?q=' + document.getElementById('city-selector').value
@@ -45,7 +45,7 @@ function displaySuggestions(data){
         suggestionsDOM.removeChild(suggestionsDOM.firstChild);
     }
     
-    document.getElementById('suggestions').style.display = 'inline-block'
+    document.getElementById('suggestions').style.display = 'inline-block che'
 
     if(data.location_suggestions.length > 0){
         for(let i = 0; i < data.location_suggestions.length; i++){
@@ -67,7 +67,10 @@ function generateCards(){
     createContainerForFirstRow()
     createContainerForSecondRow()
     createContainerForLastRow()
-    addCards()
+
+    let index = this.innerHTML.search(',')
+    let city = this.innerHTML.substring(0, index)
+    fetchRestaurants(city)
 }
 
 function createContainerForFirstRow(){
@@ -90,7 +93,29 @@ function createContainerForLastRow(){
     document.getElementById('example-cards-container').remove()
 }
 
-function addCards(){
+function fetchRestaurants(city){
+    // fetch tjhis shit
+    let cityParam = '?q=' + document.getElementById('city-selector').value
+
+    let request = new Request('https://developers.zomato.com/api/v2.1/cities' + cityParam, {
+        headers: new Headers({
+            'user-key': '56a17a2f4bcd0c8fc2eab2b69d0f4f01'
+        })
+    })
+
+
+    fetch(request, {
+        method: 'get'
+    }).then(function(response) {
+        return response.json()
+    }).then(function(j) {
+        createCards(j)
+    }).catch(function(err) {
+        console.log('error')
+    })
+}
+
+function createCards(data){
     for(let i = 0; i < 9; i++){
 
         let cardContainer = document.createElement('div')
