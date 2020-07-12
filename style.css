@@ -141,8 +141,8 @@ button:hover {
     height:100%;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
-    z-index: 0;
 }
+
 
 #box1{
     background: red;
