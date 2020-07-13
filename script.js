@@ -9,11 +9,12 @@
 
 //querySelector must have period
 
-//if more than like 6 cities pop up change the font size in the suggestion box
 
 //add event listener to each list item in loop
+// try to animate the div expansion for selection a certain restaurant
+// i remember using inner.html to get the city list item to know what results to get
 
-document.getElementById('button').addEventListener('click', fetchCity)
+document.getElementById('button').addEventListener('click', generateCards)
 
 function fetchCity(){
     let cityParam = '?q=' + document.getElementById('city-selector').value
@@ -64,45 +65,73 @@ function displaySuggestions(data){
 }
 
 function generateCards(){
-    createContainerForFirstRow()
-    createContainerForSecondRow()
-    createContainerForLastRow()
-    addCards()
+    erasePreviousStructure()
+
+    // amount = 11
+
+    // for(let i = 0; i < Math.ceil(amount / 3); i++){
+    //     createRow(i)
+    // }
+
+    // addCards()
 }
 
-function createContainerForFirstRow(){
-    document.getElementById('heading').remove()
-    document.getElementById('header-container').style.display = 'grid'
-    document.getElementById('header-container').style.gridTemplateColumns = '1fr 1fr 1fr'
+function erasePreviousStructure(){
+    document.getElementById('right-container').style.display = 'block'
+    document.getElementById('right-container').style.gridTemplateRows = 'none'
+    document.getElementById('header-container').remove()
+    document.getElementById('step1-container').remove()
+    document.getElementById('step2-container').remove()
+
+    // let modal = document.createElement('div')
+    // let modalContent = document.createElement('div')
+    // modal.id = 'modal'
+    // modalContent.id = 'modal-content'
+
+    // document.getElementById('right-container').appendChild(modal)
+
+    // modal.appendChild(modalContent)
+
+    // let closeBtn = document.createElement('span')
+    // closeBtn.id = 'closeBtn'
+    // closeBtn.innerHTML = '&times;'
+    // modalContent.appendChild(closeBtn)
+
+    // let modalText = document.createElement('p')
+    // modalText.id = 'modalText'
+    // modalText.innerHTML = 'this is the modal content'
+    // modalContent.appendChild(modalText)
+
+    
+
 }
 
-function createContainerForSecondRow(){
-    document.getElementById('step1-container').style.gridTemplateColumns = '1fr 1fr 1fr'
-    document.getElementById('step1-container').style.gridTemplateRows = 'none'
-    document.getElementById('step1-text-container').remove()
-    document.getElementById('exampleSelection').remove()
+function createRow(count){
+    let row = document.createElement('div')
+    row.id = 'row' + (count + 1)
+    document.getElementById('right-container').appendChild(row)
+    row.style.width = '100%'
+    row.style.height = '33.3vh'
+    row.style.display = 'flex'
+    row.style.justifyContent = 'space-evenly'
 }
 
-function createContainerForLastRow(){
-    document.getElementById('step2-container').style.gridTemplateColumns = '1fr 1fr 1fr'
-    document.getElementById('step2-container').style.gridTemplateRows = 'none'
-    document.getElementById('step2-text-container').remove()
-    document.getElementById('example-cards-container').remove()
-}
 
 function addCards(){
-    for(let i = 0; i < 9; i++){
+    for(let i = 0; i < 12; i++){
 
         let cardContainer = document.createElement('div')
         cardContainer.classList.add('card-container')
         cardContainer.id = 'card-container-' + i
 
         if(i < 3){
-            document.getElementById('header-container').appendChild(cardContainer)
+            document.getElementById('row1').appendChild(cardContainer)
         }else if(i >= 3 && i < 6){
-            document.getElementById('step1-container').appendChild(cardContainer)
+            document.getElementById('row2').appendChild(cardContainer)
+        }else if(i >= 6 && i < 9){
+            document.getElementById('row3').appendChild(cardContainer)
         }else{
-            document.getElementById('step2-container').appendChild(cardContainer)
+            document.getElementById('row4').appendChild(cardContainer)
         }
 
         let card = document.createElement('div')

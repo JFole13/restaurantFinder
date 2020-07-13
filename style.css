@@ -140,9 +140,48 @@ button:hover {
     width:100%;
     height:100%;
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows:minmax(1fr, 1fr)1fr 1fr 1fr;
+    overflow-y:scroll;
 }
 
+#modal{
+    position: relative;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#modal-content{
+    background-color: #f4f4f4;
+    margin: 20% auto;
+    padding: 20px;
+    width: 70%; 
+    height:30%;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+    animation-name: modalOpen;
+    animation-duration: 1s;
+}
+
+#closeBtn{
+    color:#ccc;
+    float:right;
+    font-size: 30px;
+}
+
+#closeBtn:hover, #closeBtn:focus{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@keyframes modalOpen{
+    from{opacity: 0}
+    to{opacity: 1}
+}
 
 #box1{
     background: red;
@@ -164,6 +203,7 @@ button:hover {
 #header-container{
     width:100%;
     height:100%;
+    min-height:33%;
 }
 
 #heading{
@@ -178,6 +218,7 @@ button:hover {
     height:100%;
     display:grid;
     grid-template-rows: 1fr 1.5fr;
+    min-height:33%;
 }
 
 #step1-text-container{
@@ -221,6 +262,7 @@ button:hover {
     grid-template-rows: .5fr 1fr;
     justify-items: center;
     align-items: end;
+    min-height:60%;
 }
 
 #step2-text-container{
