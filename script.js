@@ -13,8 +13,17 @@
 //add event listener to each list item in loop
 // try to animate the div expansion for selection a certain restaurant
 // i remember using inner.html to get the city list item to know what results to get
+// get rid of suggestion box when city is picked
 
-document.getElementById('button').addEventListener('click', generateCards)
+//error on line 109 (removing header container)
+//with this error ^ once you remove it once and then try to do another search, it's already removed so its returning null for that remove call
+
+//create two new functions for getResturantPic and getResturantPrice. Just pass the data through as a parameter
+// merge branches
+// placeholder text = city when city is selected
+// hover over card -- do some sort of styling
+
+document.getElementById('button').addEventListener('click', fetchCity)
 
 function fetchCity(){
     let cityParam = '?q=' + document.getElementById('city-selector').value
@@ -52,9 +61,17 @@ function displaySuggestions(data){
         for(let i = 0; i < data.location_suggestions.length; i++){
             let listItem = document.createElement('li')
             listItem.innerHTML = data.location_suggestions[i].name
+
+            let city = {
+                name:data.location_suggestions[i].name,
+                id:data.location_suggestions[i].id
+            }
+
             document.getElementById('suggestionsList').appendChild(listItem)
 
-            listItem.addEventListener('click', generateCards)
+            listItem.addEventListener('click', function(){
+                generateCards(city)
+            })
         }
     }else{
         let listItem = document.createElement('p')
@@ -64,16 +81,30 @@ function displaySuggestions(data){
     }
 }
 
-function generateCards(){
+function generateCards(city){
+
     erasePreviousStructure()
 
-    // amount = 11
+    let cityID = city.id
+    let request = new Request('https://developers.zomato.com/api/v2.1/search?entity_id=' + cityID + '&entity_type=city', {
+        headers: new Headers({
+            'user-key': '56a17a2f4bcd0c8fc2eab2b69d0f4f01'
+        })
+    })
 
-    // for(let i = 0; i < Math.ceil(amount / 3); i++){
-    //     createRow(i)
-    // }
+    fetch(request, {
+        method: 'get'
+    }).then(function(response) {
+        return response.json()
+    }).then(function(j) {
+        for(let i = 0; i < Math.ceil(j.results_shown / 3); i++){
+            createRow(i)
+        }
+        addCards(j)
+    }).catch(function(err) {
+        console.log('error')
+    })
 
-    // addCards()
 }
 
 function erasePreviousStructure(){
@@ -83,25 +114,30 @@ function erasePreviousStructure(){
     document.getElementById('step1-container').remove()
     document.getElementById('step2-container').remove()
 
-    // let modal = document.createElement('div')
-    // let modalContent = document.createElement('div')
-    // modal.id = 'modal'
-    // modalContent.id = 'modal-content'
+    let modal = document.createElement('div')
+    let modalContent = document.createElement('div')
+    modal.id = 'modal'
+    modalContent.id = 'modal-content'
 
-    // document.getElementById('right-container').appendChild(modal)
+    document.getElementById('right-container').appendChild(modal)
 
-    // modal.appendChild(modalContent)
+    modal.appendChild(modalContent)
 
-    // let closeBtn = document.createElement('span')
-    // closeBtn.id = 'closeBtn'
-    // closeBtn.innerHTML = '&times;'
-    // modalContent.appendChild(closeBtn)
+    let closeBtn = document.createElement('span')
+    closeBtn.id = 'closeBtn'
+    closeBtn.innerHTML = '&times;'
+    modalContent.appendChild(closeBtn)
 
-    // let modalText = document.createElement('p')
-    // modalText.id = 'modalText'
-    // modalText.innerHTML = 'this is the modal content'
-    // modalContent.appendChild(modalText)
+    let modalText = document.createElement('p')
+    modalText.id = 'modalText'
+    modalText.innerHTML = 'this is the modal content'
+    modalContent.appendChild(modalText)
 
+    closeBtn.addEventListener('click', function(){
+        modal.style.display = 'none'
+    })
+
+    window.addEventListener('click', clickOutside)
     
 
 }
@@ -116,31 +152,38 @@ function createRow(count){
     row.style.justifyContent = 'space-evenly'
 }
 
+function addCards(data){
+    // if row isnt filled than the cards are strectched - maybe try max width: for card
 
-function addCards(){
-    for(let i = 0; i < 12; i++){
+    let count = 1
+    for(let i = 0; i < data.results_shown; i++){
 
         let cardContainer = document.createElement('div')
         cardContainer.classList.add('card-container')
         cardContainer.id = 'card-container-' + i
 
-        if(i < 3){
-            document.getElementById('row1').appendChild(cardContainer)
-        }else if(i >= 3 && i < 6){
-            document.getElementById('row2').appendChild(cardContainer)
-        }else if(i >= 6 && i < 9){
-            document.getElementById('row3').appendChild(cardContainer)
-        }else{
-            document.getElementById('row4').appendChild(cardContainer)
+        if(i > 0 && i % 3 == 0){
+            count += 1
         }
+
+        document.getElementById('row' + count).appendChild(cardContainer)
 
         let card = document.createElement('div')
         card.classList.add('card')
         card.id = 'card-' + i
         document.getElementById('card-container-' + i).appendChild(card)
 
+        card.addEventListener('click', function(){
+            displayDOM()
+        })
+
         let cardPicture = document.createElement('div')
         cardPicture.classList.add('card-picture')
+
+        //getting picture
+        cardPicture.style.background = '#848484 url(images/strawberry.svg) no-repeat center'
+        cardPicture.style.backgroundSize = '40% 70%'
+
         document.getElementById('card-' + i).appendChild(cardPicture)
 
         let cardCaptionContainer = document.createElement('div')
@@ -154,7 +197,7 @@ function addCards(){
         document.getElementById('card-caption-container-' + i).appendChild(cardCaptionTextContainer)
 
         let cardCaption = document.createElement('p')
-        cardCaption.innerHTML = 'lorem ipsum'
+        cardCaption.innerHTML = data.restaurants[i].restaurant.name
         cardCaption.classList.add('card-caption')
         document.getElementById('card-caption-text-container-' + i).appendChild(cardCaption)
 
@@ -164,9 +207,26 @@ function addCards(){
         document.getElementById('card-caption-container-' + i).appendChild(cardCaptionPriceContainer)
 
         let cardPrice = document.createElement('p')
-        cardPrice.innerHTML = '$'
+        cardPrice.innerHTML = '$'.repeat(data.restaurants[i].restaurant.price_range)
         cardPrice.classList.add('card-caption')
         cardPrice.style.textAlign = 'center'
         document.getElementById('card-caption-price-container-' + i).appendChild(cardPrice)
     }
+}
+
+function displayDOM(){
+    document.getElementById('modal').style.display = 'block'
+}
+
+function clickOutside(e){
+    if(e.target == modal){
+        document.getElementById('modal').style.display = 'none'
+    }
+}
+
+function getResturantPic(data){
+
+}
+
+function getResturantPrice(data){
 }
