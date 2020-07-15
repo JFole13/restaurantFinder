@@ -10,7 +10,6 @@
 //querySelector must have period
 
 
-
 //add event listener to each list item in loop
 // try to animate the div expansion for selection a certain restaurant
 // i remember using inner.html to get the city list item to know what results to get
@@ -56,7 +55,7 @@ function displaySuggestions(data){
         suggestionsDOM.removeChild(suggestionsDOM.firstChild);
     }
     
-    document.getElementById('suggestions').style.display = 'inline-block che'
+    document.getElementById('suggestions').style.display = 'inline-block'
 
     if(data.location_suggestions.length > 0){
         for(let i = 0; i < data.location_suggestions.length; i++){
@@ -82,7 +81,6 @@ function displaySuggestions(data){
     }
 }
 
-
 function generateCards(city){
 
     erasePreviousStructure()
@@ -106,7 +104,6 @@ function generateCards(city){
     }).catch(function(err) {
         console.log('error')
     })
-
 
 }
 
@@ -160,7 +157,6 @@ function addCards(data){
 
     let count = 1
     for(let i = 0; i < data.results_shown; i++){
-
 
         let cardContainer = document.createElement('div')
         cardContainer.classList.add('card-container')
