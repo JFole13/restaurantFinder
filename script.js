@@ -181,7 +181,8 @@ function addCards(data){
         cardPicture.classList.add('card-picture')
 
         //getting picture
-        cardPicture.style.background = '#848484 url(images/strawberry.svg) no-repeat center'
+
+        cardPicture.style.background = '#848484 url(images/' + getRestaurantPic(data, i) + '.svg) no-repeat center'
         cardPicture.style.backgroundSize = '40% 70%'
 
         document.getElementById('card-' + i).appendChild(cardPicture)
@@ -224,9 +225,305 @@ function clickOutside(e){
     }
 }
 
-function getResturantPic(data){
+function getRestaurantPic(data, index){
+    let cuisine = data.restaurants[index].restaurant.cuisines
+    let commaIndex = cuisine.search(',')
+    let foodtype
 
-}
+    if(commaIndex != -1){
+        foodtype = cuisine.substring(0, commaIndex)
+    }else{
+        foodtype = cuisine
+    }
 
-function getResturantPrice(data){
+    if(cuisine.includes('Coffee and Tea')){
+        foodtype = 'Coffee and Tea'
+    }else if(cuisine.includes('Mexican')){
+        foodtype = 'Mexican'
+    }else if(cuisine.includes('Seafood')){
+        foodtype = 'Seafood'
+    }
+
+    switch(foodtype){
+        case '':
+            return 'pop'
+        case 'Afghan':
+            return 'bowlOfSomethin'
+        case 'Afghani':
+            return 'bowlOfSomethin'
+        case 'African':
+            return 'kabob'  
+        case 'American':
+            return 'hotDogWithBun' 
+        case 'Amish':
+            return 'bread'
+        case 'Argentine':
+            return 'kabob'
+        case 'Armenian':
+            return 'bowlOfSomethin'
+        case 'Asian':
+            return 'riceBall'
+        case 'Australian':
+            return 'fish'
+        case 'Austrian':
+            return 'fish'
+        case 'Belgian':
+            return 'beer'
+        case 'Bagels':
+            return 'coffee'
+        case 'Bakery':
+            return 'bread'
+        case 'Bar Food':
+            return 'beer'
+        case 'BBQ':
+            return 'hambone'
+        case 'Beverages':
+            return 'sodaCup'
+        case 'Brazilian':
+            return 'kabob'
+        case 'Breakfast':
+            return 'donut'
+        case 'British':
+            return 'tea'
+        case 'Bubble Tea':
+            return 'sodaCup'
+        case 'Burger':
+            return 'burger'
+        case 'Burmese':
+            return 'bowlOfSomethin'
+        case 'Cajun':
+            return 'fish'
+        case 'California':
+            return 'burger'
+        case 'Cambodian':
+            return 'fish'
+        case 'Canadian':
+            return 'coffee'
+        case 'Cantonese':
+            return 'riceBall'
+        case 'Caribbean':
+            return 'kabob'
+        case 'Central Asian':
+            return 'riceBall'
+        case 'Chilean':
+            return 'kabob'
+        case 'Chili':
+            return 'bowlOfSomethin'
+        case 'Chinese':
+            return 'riceBall'
+        case 'Coffee and Tea':
+            return 'coffee'
+        case 'Colombian':
+            return 'bowlOfSomethin'
+        case 'Creole':
+            return 'crab'
+        case 'Crepes':
+            return 'croissant'
+        case 'Cuban':
+            return 'kabob'
+        case 'Danish':
+            return 'croissant'
+        case 'Deli':
+            return 'cheese'
+        case 'Desserts':
+            return 'iceCreamCone'
+        case 'Dim Sum':
+            return 'kabob'
+        case 'Diner':
+            return 'burger'
+        case 'Dominican':
+            return 'kabob'
+        case 'Donuts':
+            return 'donut'
+        case 'Drinks Only':
+            return 'pop'
+        case 'Eastern European':
+            return 'kabob'
+        case 'Ecuadorian':
+            return 'bowlOfSomethin'
+        case 'Ethiopian':
+            return 'kabob'
+        case 'European':
+            return 'kabob'
+        case 'Fast Food':
+            return 'fries'
+        case 'Filipino':
+            return 'bowlOfSomethin'
+        case 'Fish and Chips':
+            return 'fish'
+        case 'Fondue':
+            return 'cheese'
+        case 'French':
+            return 'croissant'
+        case 'Frozen Yogurt':
+            return 'sundae'
+        case 'Fusion':
+            return 'kabob'
+        case 'Georgian':
+            return 'misubi'
+        case 'German':
+            return 'beer'
+        case 'Greek':
+            return 'kabob'
+        case 'Grill':
+            return 'hambone'
+        case 'Hawaiian':
+            return 'hambone'
+        case 'Healthy Food':
+            return 'avocado'
+        case 'Hungarian':
+            return 'hambone'
+        case 'Ice Cream':
+            return 'iceCreamCone'
+        case 'Indian':
+            return 'bowlOfSomethin'
+        case 'Indonesian':
+            return 'bowlOfSomethin'
+        case 'International':
+            return 'kabob'
+        case 'Iranian':
+            return 'bowlOfSomethin'
+        case 'Irish':
+            return 'hambone'
+        case 'Israeli':
+            return 'kabob'
+        case 'Italian':
+            return 'pizza'
+        case 'Jamaican':
+            return 'kabob'
+        case 'Japanese':
+            return 'sushiWithChopsticks'
+        case 'Jewish':
+            return 'fish'
+        case 'Juices':
+            return 'soda'
+        case 'Kebab':
+            return 'kebab'
+        case 'Korean':
+            return 'riceBall'
+        case 'Laotian':
+            return 'riceBall'
+        case 'Latin American':
+            return 'kabob'
+        case 'Lebanese':
+            return 'misubi'
+        case 'Malaysian':
+            return 'riceBall'
+        case 'Mediterranean':
+            return 'lobster'
+        case 'Mexican':
+            return 'taco'
+        case 'Middle Eastern':
+            return 'kabob'
+        case 'Mongolian':
+            return 'hambone'
+        case 'Morrocan':
+            return 'bowlOfSomethin'
+        case 'Mughlai':
+            return 'bowlOfSomethin'
+        case 'Nepalese':
+            return 'kabob'
+        case 'New American':
+            return 'kabob'
+        case 'New Mexican':
+            return 'taco'
+        case 'New Zealand':
+            return 'misubi'
+        case 'Nicaraguan':
+            return 'kabob'
+        case 'Pacific':
+            return 'lobster'
+        case 'Pacific Northwest':
+            return 'lobster'
+        case 'Pakistani':
+            return 'bowlOfSomethin'
+        case 'Pan Asian':
+            return 'misubi'
+        case 'Peruvian':
+            return 'kabob'
+        case 'Pizza':
+            return 'pizza'
+        case 'Po&quotBoys':
+            return 'lobster'
+        case 'Polish':
+            return 'misubi'
+        case 'Portuguese':
+            return 'bowlOfSomethin'
+        case 'Pub Food':
+            return 'beer'
+        case 'Puerto Rico':
+            return 'kabob'
+        case 'Ramen':
+            return 'riceBall'
+        case 'Russian':
+            return 'kabob'
+        case 'Salad':
+            return 'tomato'
+        case 'Salvadorean':
+            return 'taco'
+        case 'Sandwich':
+            return 'burger'
+        case 'Scandinavian':
+            return 'hambone'
+        case 'Scottish':
+            return 'bread'
+        case 'Seafood':
+            return 'fish'
+        case 'Sichuan':
+            return 'bowlOfSomethin'
+        case 'Singaporean':
+            return 'misubi'
+        case 'Somali':
+            return 'kabob'
+        case 'Soul Food':
+            return 'hambone'
+        case 'South African':
+            return 'kabob'
+        case 'South American':
+            return 'kabob'
+        case 'Southern':
+            return 'corn'
+        case 'Southwestern':
+            return 'hambone'
+        case 'Spanish':
+            return 'taco'
+        case 'Sri Lankan':
+            return 'riceBall'
+        case 'Steak':
+            return 'hambone'
+        case 'Sushi':
+            return 'sushiWithChopsticks'
+        case 'Taco':
+            return 'taco'
+        case 'Taiwanese':
+            return 'misubi'
+        case 'Tapas':
+            return 'taco'
+        case 'Thai':
+            return 'riceBall'
+        case 'Tea':
+            return 'tea'
+        case 'Teriyaki':
+            return 'riceBall'
+        case 'Tex-Mex':
+            return 'taco'
+        case 'Tibetan':
+            return 'kabob'
+        case 'Tunisian':
+            return 'bowlOfSomethin'
+        case 'Turkish':
+            return 'bowlOfSomethin'
+        case 'Ukranian':
+            return 'kabob'
+        case 'Uruguayan':
+            return 'kabob'
+        case 'Vegetarian':
+            return 'avocado'
+        case 'Venezuelan':
+            return 'kabob'
+        case 'Vietnamese':
+            return 'riceBall'
+        case 'Welsh':
+            return 'hambone'
+    }
 }
