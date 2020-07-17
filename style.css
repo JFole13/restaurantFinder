@@ -147,7 +147,7 @@ button:hover {
 #modal{
     display: none;
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     left: 0;
     top: 0;
     height: 100%;
@@ -157,15 +157,48 @@ button:hover {
 }
 
 #modal-content{
-    background-color: #f4f4f4;
+    background: #f4f4f4;
     margin: 10% auto;
     padding: 20px;
-    width: 70%; 
-    height:30%;
+    width:35%; 
+    height:60%;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
     animation-name: modalOpen;
     animation-duration: 1s;
+    border-radius: 10px;
 }
+
+#modalTitleContainer, #modalAddressContainer, #modalTimingContainer, #modalPricingContainer, #modalRatingContainer{
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+#modalAddressContainer, #modalPricingContainer{
+    background: #F87B7B;
+}
+
+#modalTitleIcon, #modalAddressIcon, #modalTimingIcon, #modalPricingIcon, #modalRatingIcon{
+    height:30px;
+    width:30px;
+    display: inline-block;
+    padding: 0 .2rem;
+}
+
+#modalTitle, #modalAddress, #modalTiming, #modalPricing, #modalRating{
+    display: inline;
+    padding: 0 1rem;
+    font-family: "visby-round";
+    font-weight: bold;
+    font-size: 1.4rem
+}
+
+#modalTitle{
+    text-decoration: underline;
+}
+
+
+
 
 #closeBtn{
     color:#ccc;
@@ -282,6 +315,15 @@ button:hover {
     margin:0;
 }
 
+.extra-card-container{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity: 0;
+}
+
 .card-container{
     width:100%;
     height:100%;
@@ -307,7 +349,11 @@ button:hover {
 
 .card:hover{
     cursor: pointer;
+    opacity: .7; 
+    -webkit-filter: grayscale(100%);
 }
+
+
 
 .card-picture{
     width:100%;

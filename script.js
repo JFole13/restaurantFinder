@@ -23,6 +23,19 @@
 // placeholder text = city when city is selected
 // hover over card -- do some sort of styling
 
+//compress photos
+// responsivness
+// clean code
+let numOfRequests = 0
+
+document.getElementById('city-selector')
+    .addEventListener('keyup', function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById('button').click();
+    }
+});
+
 document.getElementById('button').addEventListener('click', fetchCity)
 
 function fetchCity(){
@@ -82,9 +95,14 @@ function displaySuggestions(data){
 }
 
 function generateCards(city){
-
-    erasePreviousStructure()
-
+    
+    if(numOfRequests < 1){
+        console.log('num is 0')
+        erasePreviousStructure()
+    }else{
+        console.log('num is more than 0')
+    }
+   
     let cityID = city.id
     let request = new Request('https://developers.zomato.com/api/v2.1/search?entity_id=' + cityID + '&entity_type=city', {
         headers: new Headers({
@@ -97,10 +115,15 @@ function generateCards(city){
     }).then(function(response) {
         return response.json()
     }).then(function(j) {
-        for(let i = 0; i < Math.ceil(j.results_shown / 3); i++){
-            createRow(i)
+        if(numOfRequests < 1){
+            for(let i = 0; i < Math.ceil(j.results_shown / 3); i++){
+                createRow(i)
+            }
+            addCards(j)
+        }else{
+            addAdditionalCards(j)
         }
-        addCards(j)
+        numOfRequests++
     }).catch(function(err) {
         console.log('error')
     })
@@ -113,33 +136,6 @@ function erasePreviousStructure(){
     document.getElementById('header-container').remove()
     document.getElementById('step1-container').remove()
     document.getElementById('step2-container').remove()
-
-    let modal = document.createElement('div')
-    let modalContent = document.createElement('div')
-    modal.id = 'modal'
-    modalContent.id = 'modal-content'
-
-    document.getElementById('right-container').appendChild(modal)
-
-    modal.appendChild(modalContent)
-
-    let closeBtn = document.createElement('span')
-    closeBtn.id = 'closeBtn'
-    closeBtn.innerHTML = '&times;'
-    modalContent.appendChild(closeBtn)
-
-    let modalText = document.createElement('p')
-    modalText.id = 'modalText'
-    modalText.innerHTML = 'this is the modal content'
-    modalContent.appendChild(modalText)
-
-    closeBtn.addEventListener('click', function(){
-        modal.style.display = 'none'
-    })
-
-    window.addEventListener('click', clickOutside)
-    
-
 }
 
 function createRow(count){
@@ -149,11 +145,18 @@ function createRow(count){
     row.style.width = '100%'
     row.style.height = '33.3vh'
     row.style.display = 'flex'
-    row.style.justifyContent = 'space-evenly'
 }
 
 function addCards(data){
     // if row isnt filled than the cards are strectched - maybe try max width: for card
+
+    createModal()
+    
+    let modalTitles = {}
+    let modalAddresses = {}
+    let modalTimings = {}
+    let modalPricings = {}
+    let modalRatings = {}
 
     let count = 1
     for(let i = 0; i < data.results_shown; i++){
@@ -170,27 +173,33 @@ function addCards(data){
 
         let card = document.createElement('div')
         card.classList.add('card')
-        card.id = 'card-' + i
+        card.id = 'card' + i
         document.getElementById('card-container-' + i).appendChild(card)
 
         card.addEventListener('click', function(){
-            displayDOM()
+            document.getElementById('modal').style.display = 'block'
+            getTitleForModal(modalTitles, i)
+            getAddressForModal(modalAddresses, i)
+            getTimingForModal(modalTimings, i)
+            getPricingForModal(modalPricings, i)
+            getRatingForModal(modalRatings, i)
         })
 
         let cardPicture = document.createElement('div')
         cardPicture.classList.add('card-picture')
+        cardPicture.id = 'cardPicture' + i
 
         //getting picture
 
         cardPicture.style.background = '#848484 url(images/' + getRestaurantPic(data, i) + '.svg) no-repeat center'
         cardPicture.style.backgroundSize = '40% 70%'
 
-        document.getElementById('card-' + i).appendChild(cardPicture)
+        document.getElementById('card' + i).appendChild(cardPicture)
 
         let cardCaptionContainer = document.createElement('div')
         cardCaptionContainer.classList.add('card-caption-container')
         cardCaptionContainer.id = 'card-caption-container-' + i
-        document.getElementById('card-' + i).appendChild(cardCaptionContainer)
+        document.getElementById('card' + i).appendChild(cardCaptionContainer)
             
         let cardCaptionTextContainer = document.createElement('div')
         cardCaptionTextContainer.classList.add('card-caption-text-container')
@@ -198,9 +207,17 @@ function addCards(data){
         document.getElementById('card-caption-container-' + i).appendChild(cardCaptionTextContainer)
 
         let cardCaption = document.createElement('p')
+        cardCaption.id = 'cardCaption' + i
         cardCaption.innerHTML = data.restaurants[i].restaurant.name
         cardCaption.classList.add('card-caption')
         document.getElementById('card-caption-text-container-' + i).appendChild(cardCaption)
+
+
+        modalTitles['title' + i] = data.restaurants[i].restaurant.name
+        modalAddresses['address' + i] = data.restaurants[i].restaurant.location.address 
+        modalTimings['timing' + i] = data.restaurants[i].restaurant.timings
+        modalPricings['pricing' + i] = data.restaurants[i].restaurant.average_cost_for_two
+        modalRatings['rating' + i] = data.restaurants[i].restaurant.user_rating.aggregate_rating
 
         let cardCaptionPriceContainer = document.createElement('div')
         cardCaptionPriceContainer.classList.add('card-caption-price-container')
@@ -210,19 +227,179 @@ function addCards(data){
         let cardPrice = document.createElement('p')
         cardPrice.innerHTML = '$'.repeat(data.restaurants[i].restaurant.price_range)
         cardPrice.classList.add('card-caption')
+        cardPrice.id = 'cardPrice' + i
         cardPrice.style.textAlign = 'center'
         document.getElementById('card-caption-price-container-' + i).appendChild(cardPrice)
     }
+
+    let extraContainer = document.createElement('div')
+    extraContainer.classList.add('extra-card-container')
+    document.getElementById('row' + Math.ceil(data.results_shown / 3)).appendChild(extraContainer)
 }
 
-function displayDOM(){
-    document.getElementById('modal').style.display = 'block'
+function addAdditionalCards(data){
+    let modalTitles = {}
+    let modalAddresses = {}
+    let modalTimings = {}
+    let modalPricings = {}
+    let modalRatings = {}
+
+    console.log(data.restaurants[0].restaurant.name)
+
+    for(let i = 0; i < data.results_shown; i++){
+    
+        document.getElementById('cardCaption' + i).innerHTML = data.restaurants[i].restaurant.name
+
+        document.getElementById('cardPicture' + i).style.background = '#848484 url(images/' + getRestaurantPic(data, i) + '.svg) no-repeat center'
+        document.getElementById('cardPicture' + i).style.backgroundSize = '40% 70%'
+
+        document.getElementById('cardPrice' + i).innerHTML = '$'.repeat(data.restaurants[i].restaurant.price_range)
+
+        document.getElementById('card' + i).addEventListener('click', function(){
+            getTitleForModal(modalTitles, i)
+            getAddressForModal(modalAddresses, i)
+            getTimingForModal(modalTimings, i)
+            getPricingForModal(modalPricings, i)
+            getRatingForModal(modalRatings, i)
+        })
+
+        modalTitles['title' + i] = data.restaurants[i].restaurant.name
+        modalAddresses['address' + i] = data.restaurants[i].restaurant.location.address 
+        modalTimings['timing' + i] = data.restaurants[i].restaurant.timings
+        modalPricings['pricing' + i] = data.restaurants[i].restaurant.average_cost_for_two
+        modalRatings['rating' + i] = data.restaurants[i].restaurant.user_rating.aggregate_rating
+    }
+}
+
+function getTitleForModal(modalTitles, index){
+    document.getElementById('modalTitle').innerHTML = modalTitles['title' + index]    
+}
+
+function getAddressForModal(modalAddresses, index){
+    document.getElementById('modalAddress').innerHTML = modalAddresses['address' + index]
+}
+
+function getTimingForModal(modalTimings, index){
+    if(modalTimings['timing' + index] == ''){
+        document.getElementById('modalTiming').innerHTML = 'N/A'
+    }else{
+        document.getElementById('modalTiming').innerHTML = modalTimings['timing' + index]
+    }
+}
+
+function getPricingForModal(modalPricings, index){
+    if(modalPricings['pricing' + index] == ''){
+        document.getElementById('modalPricing').innerHTML = 'N/A'
+    }else{
+        document.getElementById('modalPricing').innerHTML = `Average Price for Two: $${modalPricings['pricing' + index]}` 
+    }
+}
+
+function getRatingForModal(modalRatings, index){
+    if(modalRatings['rating' + index] == ''){
+        document.getElementById('modalRating').innerHTML = 'N/A'
+    }else{
+        document.getElementById('modalRating').innerHTML = `${modalRatings['rating' + index]} out of 5`
+    }
 }
 
 function clickOutside(e){
     if(e.target == modal){
         document.getElementById('modal').style.display = 'none'
     }
+}
+
+function createModal(){
+    let modal = document.createElement('div')
+    let modalContent = document.createElement('div')
+    modal.id = 'modal'
+    modalContent.id = 'modal-content'
+
+    modalContent.style.display = 'grid'
+    modalContent.style.gridTemplateRows = 'repeat(5, 1fr)'
+
+    document.getElementById('right-container').appendChild(modal)
+
+    modal.appendChild(modalContent)
+
+
+    // let modalTitleIcon = document.createElement('img')
+    // modalTitleIcon.id = 'modalTitleIcon'
+    // modalTitleIcon.src = 'images/restaurant-outline.svg'
+    // modalTitle.appendChild(modalTitleIcon)
+
+    // modal title
+    let modalTitleContainer = document.createElement('div')
+    modalTitleContainer.id = 'modalTitleContainer'
+    modalContent.appendChild(modalTitleContainer)
+    
+
+    let modalTitleIcon = document.createElement('img')
+    modalTitleIcon.id = 'modalTitleIcon'
+    modalTitleIcon.src = 'images/restaurant-outline.svg'
+    modalTitleContainer.appendChild(modalTitleIcon)
+
+    let modalTitle = document.createElement('p')
+    modalTitle.id = 'modalTitle'
+    modalTitleContainer.appendChild(modalTitle)
+
+    //modal address
+    let modalAddressContainer = document.createElement('div')
+    modalAddressContainer.id = 'modalAddressContainer'
+    modalContent.appendChild(modalAddressContainer)
+
+    let modalAddressIcon = document.createElement('img')
+    modalAddressIcon.id = 'modalAddressIcon'
+    modalAddressIcon.src = 'images/compass-outline.svg'
+    modalAddressContainer.appendChild(modalAddressIcon)
+
+    let modalAddress = document.createElement('p')
+    modalAddress.id = 'modalAddress'
+    modalAddressContainer.appendChild(modalAddress)
+
+    //modal timing
+    let modalTimingContainer = document.createElement('div')
+    modalTimingContainer.id = 'modalTimingContainer'
+    modalContent.appendChild(modalTimingContainer)
+
+    let modalTimingIcon = document.createElement('img')
+    modalTimingIcon.id = 'modalTimingIcon'
+    modalTimingIcon.src = 'images/time-outline.svg'
+    modalTimingContainer.appendChild(modalTimingIcon)
+
+    let modalTiming = document.createElement('p')
+    modalTiming.id = 'modalTiming'
+    modalTimingContainer.appendChild(modalTiming)
+
+    // modal pricing
+    let modalPricingContainer = document.createElement('div')
+    modalPricingContainer.id = 'modalPricingContainer'
+    modalContent.appendChild(modalPricingContainer)
+
+    let modalPricingIcon = document.createElement('img')
+    modalPricingIcon.id = 'modalPricingIcon'
+    modalPricingIcon.src = 'images/cash-outline.svg'
+    modalPricingContainer.appendChild(modalPricingIcon)
+
+    let modalPricing = document.createElement('p')
+    modalPricing.id = 'modalPricing'
+    modalPricingContainer.appendChild(modalPricing)
+
+    // modal rating
+    let modalRatingContainer = document.createElement('div')
+    modalRatingContainer.id = 'modalRatingContainer'
+    modalContent.appendChild(modalRatingContainer)
+
+    let modalRatingIcon = document.createElement('img')
+    modalRatingIcon.id = 'modalRatingIcon'
+    modalRatingIcon.src = 'images/star-outline.svg'
+    modalRatingContainer.appendChild(modalRatingIcon)
+
+    let modalRating = document.createElement('div')
+    modalRating.id = 'modalRating'
+    modalRatingContainer.appendChild(modalRating)
+
+    window.addEventListener('click', clickOutside)
 }
 
 function getRestaurantPic(data, index){
