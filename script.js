@@ -1,35 +1,7 @@
-// First Commit
-// Split Screen Design
-// Will use white and a light red as a theme
-// left side is where city selector will be
-// right side is the results
-// modals maybe
-//Edge cases: states with duplicate city names, 404 city not found protocol 
-// responsive design: once you hit the big breaking point start doing vertical design
-
-//querySelector must have period
-
-
-//add event listener to each list item in loop
-// try to animate the div expansion for selection a certain restaurant
-// i remember using inner.html to get the city list item to know what results to get
-// get rid of suggestion box when city is picked
-
-//error on line 109 (removing header container)
-//with this error ^ once you remove it once and then try to do another search, it's already removed so its returning null for that remove call
-
-//create two new functions for getResturantPic and getResturantPrice. Just pass the data through as a parameter
-// merge branches
-// placeholder text = city when city is selected
-// hover over card -- do some sort of styling
-
-//compress photos
-// responsivness
-// clean code
 let numOfRequests = 0
 
-document.getElementById('city-selector')
-    .addEventListener('keyup', function(event) {
+// button gets clicked when enter key is pressed
+document.getElementById('citySelector').addEventListener('keyup', function(event) {
     event.preventDefault();
     if (event.keyCode === 13) {
         document.getElementById('button').click();
@@ -39,14 +11,13 @@ document.getElementById('city-selector')
 document.getElementById('button').addEventListener('click', fetchCity)
 
 function fetchCity(){
-    let cityParam = '?q=' + document.getElementById('city-selector').value
+    let cityParam = '?q=' + document.getElementById('citySelector').value
 
     let request = new Request('https://developers.zomato.com/api/v2.1/cities' + cityParam, {
         headers: new Headers({
             'user-key': '56a17a2f4bcd0c8fc2eab2b69d0f4f01'
         })
     })
-
 
     fetch(request, {
         method: 'get'
@@ -57,12 +28,10 @@ function fetchCity(){
     }).catch(function(err) {
         console.log('error')
     })
-
-    
 }
 
 function displaySuggestions(data){
-    // erase the last search suggestions
+    // erases the last search suggestions
     let suggestionsDOM = document.getElementById('suggestionsList')
     while(suggestionsDOM.firstChild){
         suggestionsDOM.removeChild(suggestionsDOM.firstChild);
@@ -95,12 +64,9 @@ function displaySuggestions(data){
 }
 
 function generateCards(city){
-    
+    //this is to transition from the homepage to the cards on the first request
     if(numOfRequests < 1){
-        console.log('num is 0')
-        erasePreviousStructure()
-    }else{
-        console.log('num is more than 0')
+        eraseHomepageStructure()
     }
    
     let cityID = city.id
@@ -121,7 +87,7 @@ function generateCards(city){
             }
             addCards(j)
         }else{
-            addAdditionalCards(j)
+            replaceCardData(j)
         }
         numOfRequests++
     }).catch(function(err) {
@@ -130,7 +96,7 @@ function generateCards(city){
 
 }
 
-function erasePreviousStructure(){
+function eraseHomepageStructure(){
     document.getElementById('right-container').style.display = 'block'
     document.getElementById('right-container').style.gridTemplateRows = 'none'
     document.getElementById('header-container').remove()
@@ -143,13 +109,11 @@ function createRow(count){
     row.id = 'row' + (count + 1)
     document.getElementById('right-container').appendChild(row)
     row.style.width = '100%'
-    row.style.height = '33.3vh'
+    row.style.height = '33.33%'
     row.style.display = 'flex'
 }
 
 function addCards(data){
-    // if row isnt filled than the cards are strectched - maybe try max width: for card
-
     createModal()
     
     let modalTitles = {}
@@ -160,7 +124,7 @@ function addCards(data){
 
     let count = 1
     for(let i = 0; i < data.results_shown; i++){
-
+        // card container creation 
         let cardContainer = document.createElement('div')
         cardContainer.classList.add('card-container')
         cardContainer.id = 'card-container-' + i
@@ -171,6 +135,7 @@ function addCards(data){
 
         document.getElementById('row' + count).appendChild(cardContainer)
 
+        // card creation
         let card = document.createElement('div')
         card.classList.add('card')
         card.id = 'card' + i
@@ -178,6 +143,9 @@ function addCards(data){
 
         card.addEventListener('click', function(){
             document.getElementById('modal').style.display = 'block'
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+            document.querySelector('body').classList.toggle('stop-scrolling')
             getTitleForModal(modalTitles, i)
             getAddressForModal(modalAddresses, i)
             getTimingForModal(modalTimings, i)
@@ -185,22 +153,22 @@ function addCards(data){
             getRatingForModal(modalRatings, i)
         })
 
+        // card picture creation
         let cardPicture = document.createElement('div')
         cardPicture.classList.add('card-picture')
         cardPicture.id = 'cardPicture' + i
-
-        //getting picture
 
         cardPicture.style.background = '#848484 url(images/' + getRestaurantPic(data, i) + '.svg) no-repeat center'
         cardPicture.style.backgroundSize = '40% 70%'
 
         document.getElementById('card' + i).appendChild(cardPicture)
 
+        // card caption creation
         let cardCaptionContainer = document.createElement('div')
         cardCaptionContainer.classList.add('card-caption-container')
         cardCaptionContainer.id = 'card-caption-container-' + i
         document.getElementById('card' + i).appendChild(cardCaptionContainer)
-            
+        
         let cardCaptionTextContainer = document.createElement('div')
         cardCaptionTextContainer.classList.add('card-caption-text-container')
         cardCaptionTextContainer.id = 'card-caption-text-container-' + i
@@ -212,13 +180,14 @@ function addCards(data){
         cardCaption.classList.add('card-caption')
         document.getElementById('card-caption-text-container-' + i).appendChild(cardCaption)
 
-
+        // each card iteration is a key to its unique data in this array 
         modalTitles['title' + i] = data.restaurants[i].restaurant.name
         modalAddresses['address' + i] = data.restaurants[i].restaurant.location.address 
         modalTimings['timing' + i] = data.restaurants[i].restaurant.timings
         modalPricings['pricing' + i] = data.restaurants[i].restaurant.average_cost_for_two
         modalRatings['rating' + i] = data.restaurants[i].restaurant.user_rating.aggregate_rating
 
+        // card caption price creation
         let cardCaptionPriceContainer = document.createElement('div')
         cardCaptionPriceContainer.classList.add('card-caption-price-container')
         cardCaptionPriceContainer.id = 'card-caption-price-container-' + i
@@ -237,14 +206,13 @@ function addCards(data){
     document.getElementById('row' + Math.ceil(data.results_shown / 3)).appendChild(extraContainer)
 }
 
-function addAdditionalCards(data){
+// card data is swapped out for new data 
+function replaceCardData(data){
     let modalTitles = {}
     let modalAddresses = {}
     let modalTimings = {}
     let modalPricings = {}
     let modalRatings = {}
-
-    console.log(data.restaurants[0].restaurant.name)
 
     for(let i = 0; i < data.results_shown; i++){
     
@@ -270,6 +238,7 @@ function addAdditionalCards(data){
         modalRatings['rating' + i] = data.restaurants[i].restaurant.user_rating.aggregate_rating
     }
 }
+
 
 function getTitleForModal(modalTitles, index){
     document.getElementById('modalTitle').innerHTML = modalTitles['title' + index]    
@@ -303,6 +272,7 @@ function getRatingForModal(modalRatings, index){
     }
 }
 
+// used for modal
 function clickOutside(e){
     if(e.target == modal){
         document.getElementById('modal').style.display = 'none'
@@ -322,18 +292,11 @@ function createModal(){
 
     modal.appendChild(modalContent)
 
-
-    // let modalTitleIcon = document.createElement('img')
-    // modalTitleIcon.id = 'modalTitleIcon'
-    // modalTitleIcon.src = 'images/restaurant-outline.svg'
-    // modalTitle.appendChild(modalTitleIcon)
-
-    // modal title
+    // modal title creation
     let modalTitleContainer = document.createElement('div')
     modalTitleContainer.id = 'modalTitleContainer'
     modalContent.appendChild(modalTitleContainer)
     
-
     let modalTitleIcon = document.createElement('img')
     modalTitleIcon.id = 'modalTitleIcon'
     modalTitleIcon.src = 'images/restaurant-outline.svg'
@@ -343,7 +306,17 @@ function createModal(){
     modalTitle.id = 'modalTitle'
     modalTitleContainer.appendChild(modalTitle)
 
-    //modal address
+    let closeBtn = document.createElement('p')
+    closeBtn.id = 'closeBtn'
+    closeBtn.innerHTML = '&times;'
+    modalTitleContainer.appendChild(closeBtn)
+
+    closeBtn.addEventListener('click', function(){
+        document.getElementById('modal').style.display = 'none'
+        document.querySelector('body').classList.toggle('stop-scrolling')
+    })
+
+    // modal address creation
     let modalAddressContainer = document.createElement('div')
     modalAddressContainer.id = 'modalAddressContainer'
     modalContent.appendChild(modalAddressContainer)
@@ -357,7 +330,7 @@ function createModal(){
     modalAddress.id = 'modalAddress'
     modalAddressContainer.appendChild(modalAddress)
 
-    //modal timing
+    // modal timing creation
     let modalTimingContainer = document.createElement('div')
     modalTimingContainer.id = 'modalTimingContainer'
     modalContent.appendChild(modalTimingContainer)
@@ -371,7 +344,7 @@ function createModal(){
     modalTiming.id = 'modalTiming'
     modalTimingContainer.appendChild(modalTiming)
 
-    // modal pricing
+    // modal pricing creation
     let modalPricingContainer = document.createElement('div')
     modalPricingContainer.id = 'modalPricingContainer'
     modalContent.appendChild(modalPricingContainer)
@@ -385,7 +358,7 @@ function createModal(){
     modalPricing.id = 'modalPricing'
     modalPricingContainer.appendChild(modalPricing)
 
-    // modal rating
+    // modal rating creation
     let modalRatingContainer = document.createElement('div')
     modalRatingContainer.id = 'modalRatingContainer'
     modalContent.appendChild(modalRatingContainer)
@@ -431,7 +404,7 @@ function getRestaurantPic(data, index){
         case 'African':
             return 'kabob'  
         case 'American':
-            return 'hotDogWithBun' 
+            return 'burger' 
         case 'Amish':
             return 'bread'
         case 'Argentine':
@@ -441,9 +414,9 @@ function getRestaurantPic(data, index){
         case 'Asian':
             return 'riceBall'
         case 'Australian':
-            return 'fish'
+            return 'lobster'
         case 'Austrian':
-            return 'fish'
+            return 'lobster'
         case 'Belgian':
             return 'beer'
         case 'Bagels':
@@ -468,12 +441,14 @@ function getRestaurantPic(data, index){
             return 'burger'
         case 'Burmese':
             return 'bowlOfSomethin'
+        case 'Cafe':
+            return 'coffee'
         case 'Cajun':
-            return 'fish'
+            return 'lobster'
         case 'California':
             return 'burger'
         case 'Cambodian':
-            return 'fish'
+            return 'lobster'
         case 'Canadian':
             return 'coffee'
         case 'Cantonese':
@@ -526,14 +501,14 @@ function getRestaurantPic(data, index){
             return 'fries'
         case 'Filipino':
             return 'bowlOfSomethin'
-        case 'Fish and Chips':
-            return 'fish'
+        case 'lobster and Chips':
+            return 'lobster'
         case 'Fondue':
             return 'cheese'
         case 'French':
             return 'croissant'
         case 'Frozen Yogurt':
-            return 'sundae'
+            return 'iceCream'
         case 'Fusion':
             return 'kabob'
         case 'Georgian':
@@ -571,7 +546,7 @@ function getRestaurantPic(data, index){
         case 'Japanese':
             return 'sushiWithChopsticks'
         case 'Jewish':
-            return 'fish'
+            return 'lobster'
         case 'Juices':
             return 'soda'
         case 'Kebab':
@@ -645,7 +620,7 @@ function getRestaurantPic(data, index){
         case 'Scottish':
             return 'bread'
         case 'Seafood':
-            return 'fish'
+            return 'lobster'
         case 'Sichuan':
             return 'bowlOfSomethin'
         case 'Singaporean':

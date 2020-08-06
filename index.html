@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Jesse Foley">
-    <meta name="description" content="A simple app to find restaurants nearby a given location using the Zomato API">
-    <meta name="keywords" content="restaurants, dining">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" type="image/svg" sizes="32x32" href="images/tomato.svg">
-    <link rel="icon" type="image/svg" sizes="16x16" href="images/tomato.svg"> 
+    <meta name="description" content="A simple app to find restaurants nearby a given location using the Zomato API">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicons/favicon-16x16.png">
+    <link rel="manifest" href="images/favicons/site.webmanifest">
+    <link rel="mask-icon" href="images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" media="screen and (min-device-width: 1300px)" href="style.css">
+    <link rel="stylesheet" media="screen and (max-device-width: 1299px)" href="mobile.css">
     <title>Find Nearby Restaurants</title>
-    <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/0c7c9d0316.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div id="main-container">
         <div id="left-container">
             <div id="input-container">
-                <input id="city-selector" type="text"  placeholder="Enter City">
-                <button id="button" type="submit"><i class="fas fa-arrow-right fa-2x"></i></button>
+                <input id="citySelector" type="text" placeholder="Enter City">
+                <button id="button" type="submit" aria-label="Submit"><i class="fas fa-arrow-right fa-2x"></i></button>
             </div>
             <div id="suggestion-container">
                 <div id="suggestions">
@@ -31,15 +35,15 @@
         </div>
         <div id="right-container">
             <div id="header-container">
-                <h1 id="heading">Welcome to restaurant<span class="red">Finder</span></h1>
+                <h1 id="heading">Welcome to restaurant<span style="color: #ff0000;">Finder</span></h1>
             </div>
             <div id="step1-container">
                 <div id="step1-text-container">
                     <h2 class="stepsText">1. Enter in your city <em>smaller cities may not be available</em></h2>
                 </div>
-                <div id="exampleSelection">
-                    <img src="images/exampleInput.PNG" alt="Example Selection">
-                    <img src="images/exampleInput2.PNG" alt="Example Selection 2">
+                <div id="example-selection-container">
+                    <img src="images/exampleInput.PNG" id="exampleImg1" alt="Example Selection">
+                    <img src="images/exampleInput2.PNG" id="exampleImg2" alt="Example Selection 2">
                 </div>
             </div>
             <div id="step2-container">
@@ -47,8 +51,8 @@
                     <h2 class="stepsText">2. Click a city from available options</h2>
                 </div>
                 <div id="example-cards-container">
-                    <img src="images/exampleSuggestions2.PNG" alt="Example Suggestion">
-                    <img src="images/exampleSuggestions.PNG" alt="Example Suggestions 2">
+                    <img src="images/exampleSuggestions2.PNG" id="exampleImg3" alt="Example Suggestion">
+                    <img src="images/exampleSuggestions.PNG" id="exampleImg4" alt="Example Suggestions 2">
                 </div>
             </div>
         </div>
